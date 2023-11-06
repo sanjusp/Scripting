@@ -2,67 +2,29 @@
  * @NApiVersion 2.1
  * @NScriptType Suitelet
  */
-define(['N/record', 'N/ui/serverWidget'], (record, serverWidget) => {
+define(['N/record'], (record) => {
     /**
-     * Defines the Suitelet script trigger point.
+     * Defines the Suitelet script trigger point for POST requests.
      * @param {Object} scriptContext
-     * @param {ServerRequest} scriptContext.request - Incoming request
+     * @param {ServerRequest} scriptContext.request - Incoming POST request
      * @param {ServerResponse} scriptContext.response - Suitelet response
      * @since 2015.2
      */
     const onRequest = (context) => {
         try {
-            if (context.request.method === 'GET') {
-                var form = serverWidget.createForm({
-                    title: 'Patient Registration Form',
-                });
-
-                var nameField = form.addField({
-                    id: 'name',
-                    type: serverWidget.FieldType.TEXT,
-                    label: 'Name',
-                });
-                nameField.isMandatory = true;
-
-                var ageField = form.addField({
-                    id: 'age',
-                    type: serverWidget.FieldType.INTEGER,
-                    label: 'Age',
-                });
-                ageField.isMandatory = true;
-
-                var sexField = form.addField({
-                    id: 'sex',
-                    type: serverWidget.FieldType.SELECT,
-                    source: 'customlist_jj_cl_sex',
-                    label: 'Sex',
-                });
-                sexField.isMandatory = true;
-
-                var addressField = form.addField({
-                    id: 'address',
-                    type: serverWidget.FieldType.TEXT,
-                    label: 'Address',
-                });
-                addressField.isMandatory = true;
-
-                form.addSubmitButton({
-                    label: 'Submit',
-                });
-
-                context.response.writePage(form);
-            } else if (context.request.method === 'POST') {
+            if (context.request.method === 'POST') {
                 var postData = context.request.parameters;
 
                 var patientRecord = record.create({
                     type: 'customrecord_jj_cr_patient_record_otp502',
                 });
-
+                log.debug('Record Loaded');
 
                 patientRecord.setValue({
                     fieldId: 'custrecord1',
                     value: postData.name,
                 });
+                log.debug('Name Updated');
 
                 patientRecord.setValue({
                     fieldId: 'custrecord2',
