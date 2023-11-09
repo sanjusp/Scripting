@@ -1,7 +1,28 @@
 /**
  * @NApiVersion 2.1
  * @NScriptType Suitelet
+ * @NModuleScope SameAccount
  */
+/****************************************************************************
+************************************************
+**${OTP-5549} : ${External Custom Record form and actions}
+* 
+*****************************************************************************
+*********************************************
+* Author: Jobin & Jismi IT Services LLP
+*
+* Date Created : 6-November-2023
+*
+* Created By: Sanju S, Jobin & Jismi IT Services LLP
+*
+* Description : 
+*This script is for creating a custom form. Entries to the custom record can be made using this Custom form.
+* If there is a customer with the given email Id, link that customer to the custom record.
+* Whenever there is an entry in a custom record, send a notification to a static NetSuite Admin.
+* If there is a Sales Rep for the customer, send a notification email to the Sales Rep as well.
+* 
+*****************************************************************************
+*******************************************************/
 define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget', 'N/url'],
     /**
  * @param{email} email
@@ -31,7 +52,7 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget', 'N/url'],
                         label: 'Customer Name',
                         isMandatory: true
                     });
-                    
+
 
                     form.addField({
                         id: 'cusmail',
@@ -39,7 +60,7 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget', 'N/url'],
                         label: 'Customer Email',
                         isMandatory: true
                     });
-                    
+
 
                     form.addField({
                         id: 'subject',
@@ -47,7 +68,7 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget', 'N/url'],
                         label: 'Subject',
                         isMandatory: true
                     });
-                    
+
 
                     form.addField({
                         id: 'message',
@@ -55,7 +76,7 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget', 'N/url'],
                         label: 'Message',
                         isMandatory: true
                     });
-                    
+
 
                     form.addSubmitButton({
                         label: 'Submit'
@@ -106,11 +127,11 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget', 'N/url'],
                             id: custId,
                             isDynamic: true
                         });
-                        log.debug('Sales Rep Detail',cusRec);
+                        log.debug('Sales Rep Detail', cusRec);
                         let salesRepId = cusRec.getValue({
                             fieldId: 'salesrep'
                         });
-                        log.debug('Sales Rep ID',salesRepId);
+                        log.debug('Sales Rep ID', salesRepId);
                         if (salesRepId) {
                             email.send({
                                 author: 962,
