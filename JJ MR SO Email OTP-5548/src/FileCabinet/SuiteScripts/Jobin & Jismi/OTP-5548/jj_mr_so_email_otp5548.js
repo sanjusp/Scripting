@@ -1,15 +1,36 @@
 /**
  * @NApiVersion 2.1
  * @NScriptType MapReduceScript
+ * @NModuleScope SameAccount
  */
-define(['N/email', 'N/file', 'N/record', 'N/search'],
+/****************************************************************************
+************************************************
+**${OTP-5548} : ${Monthly Over Due Reminder for Customer}
+* 
+*****************************************************************************
+*********************************************
+* Author: Jobin & Jismi IT Services LLP
+*
+* Date Created : 6-November-2023
+*
+* Created By: Sanju S, Jobin & Jismi IT Services LLP
+*
+* Description : 
+*Send an email notification to all Customers once a month if they have overdue Invoices.
+*We need to send the Overdue Invoice information till the previous month to the corresponding Customer.
+*The email notification should contain all of the customers overdue invoices.
+*This email notification should contain the Customer Name and Customer Email, Invoice document Number, Invoice Amount, Days Overdue which is attached as a CSV File to the email.
+*The sender of the email should be Sales Rep. If there is no Sales rep for the customer, sender will be a static NetSuite Admin
+* 
+*****************************************************************************
+*******************************************************/
+define(['N/email', 'N/file', 'N/search'],
     /**
  * @param{email} email
  * @param{file} file
- * @param{record} record
  * @param{search} search
  */
-    (email, file, record, search) => {
+    (email, file, search) => {
         /**
          * Defines the function that is executed at the beginning of the map/reduce process and generates the input data.
          * @param {Object} inputContext
@@ -120,9 +141,9 @@ define(['N/email', 'N/file', 'N/record', 'N/search'],
         const reduce = (reduceContext) => {
 
             let reduceKey = reduceContext.key;
-            log.debug('Reduce Key',reduceKey);
+            log.debug('Reduce Key', reduceKey);
             let reduceValue = reduceContext.values;
-            log.debug('Reduce Value',reduceValue);
+            log.debug('Reduce Value', reduceValue);
             let len = reduceValue.length;
             log.debug('Length', len);
 
